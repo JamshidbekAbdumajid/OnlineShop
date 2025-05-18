@@ -1,0 +1,316 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}Bosh Sahifa{% endblock %}
+{% block content %}
+<style>
+  /* Asosiy o'lcham va formatlar */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Hero section dizayni */
+  .home-hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transition: background-image 1.5s ease-in-out;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+  }
+
+  /* Qorong'i overlay qatlami */
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* Hero kontent joylashuvi */
+  .home-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Sarlavha va tekst stillar */
+  .home-hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    letter-spacing: 1px;
+    animation: fadeIn 1.2s ease-out;
+  }
+
+  .home-hero p {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    max-width: 800px;
+    animation: fadeIn 1.5s ease-out;
+  }
+
+  /* Tagdagi tugmalar guruhi */
+  .btn-group-home {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    gap: 1.2rem;
+    overflow-x: auto;
+    max-width: 95vw;
+    width: 90%;
+    padding: 0.5rem 1rem;
+    -webkit-overflow-scrolling: touch;
+    animation: slideUp 1s ease-out;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+
+  .btn-group-home::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .btn-group-home::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 3px;
+  }
+
+  /* Tugmalar stillar */
+  .btn-group-home .btn {
+    min-width: 160px;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 1rem 0.8rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border: none;
+    white-space: nowrap;
+  }
+
+  .btn-group-home .btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+  }
+
+  .btn-group-home .btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .btn-group-home .btn img {
+    width: 26px;
+    height: 26px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+  }
+
+  /* Tugmalar ranglari */
+  .btn-primary {
+    background: linear-gradient(135deg, #4a7bff, #2851b9);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #28c76f, #1f9d57);
+  }
+
+  .btn-warning {
+    background: linear-gradient(135deg, #ff9f43, #e67e22);
+  }
+
+  .btn-info {
+    background: linear-gradient(135deg, #54a0ff, #2e86de);
+  }
+
+  /* Slide indikatorlar */
+  .slide-indicators {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 2;
+  }
+
+  .slide-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .slide-indicator.active {
+    background-color: white;
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  }
+
+  /* Animatsiyalar */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translate(-50%, 30px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  /* Mobil responsive */
+  @media (max-width: 768px) {
+    .home-hero h1 {
+      font-size: 2.8rem;
+    }
+
+    .home-hero p {
+      font-size: 1.4rem;
+    }
+
+    .btn-group-home {
+      bottom: 25px;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+
+    .btn-group-home .btn {
+      min-width: 140px;
+      font-size: 0.9rem;
+      padding: 0.7rem 0.5rem;
+    }
+
+    .slide-indicators {
+      bottom: 90px;
+    }
+  }
+</style>
+
+<section class="home-hero" id="hero" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
+  <div class="home-hero-content">
+    <h1>Online Do'konimizga Xush Kelibsiz!</h1>
+    <p>Siz uchun eng sifatli kiyimlar va aksessuarlar</p>
+  </div>
+
+  <div class="slide-indicators" id="slideIndicators"></div>
+
+  <div class="btn-group-home">
+    <a href="{% url 'products' %}" class="btn btn-primary shadow-sm">
+      <img src="{% static 'store/img/products.png' %}" alt="Mahsulotlar">
+      Mahsulotlar
+    </a>
+    <a href="{% url 'register' %}" class="btn btn-success shadow-sm">
+      <img src="{% static 'store/img/register.png' %}" alt="Ro'yxatdan o'tish">
+      Ro'yxatdan o'tish
+    </a>
+    <a href="{% url 'cart' %}" class="btn btn-warning shadow-sm text-white">
+      <img src="{% static 'store/img/cart.png' %}" alt="Savatcha">
+      Savatcha
+    </a>
+    <a href="{% url 'profiles' %}" class="btn btn-info shadow-sm text-white">
+      <img src="{% static 'store/img/profile.png' %}" alt="Profil">
+      Profil
+    </a>
+  </div>
+</section>
+
+<script>
+  const hero = document.getElementById("hero");
+  const indicatorsContainer = document.getElementById("slideIndicators");
+
+  const images = [
+    "{% static 'store/img/model1.png' %}",
+    "{% static 'store/img/model2.png' %}",
+    "{% static 'store/img/model3.png' %}",
+    "{% static 'store/img/model4.png' %}"
+  ];
+
+  // Indikatorlarni yaratish
+  images.forEach((_, index) => {
+    const indicator = document.createElement("div");
+    indicator.classList.add("slide-indicator");
+    if (index === 0) indicator.classList.add("active");
+
+    indicator.addEventListener("click", () => {
+      current = index;
+      updateSlide();
+    });
+
+    indicatorsContainer.appendChild(indicator);
+  });
+
+  let current = 0;
+  const indicators = document.querySelectorAll(".slide-indicator");
+
+  const updateSlide = () => {
+    // Fon rasmini o'zgartirish
+    hero.style.backgroundImage = `url('${images[current]}')`;
+    hero.style.backgroundSize = 'cover';
+    hero.style.width = '100vw';
+    hero.style.height = '100vh';
+
+    // Indikatorlarni yangilash
+    indicators.forEach((ind, index) => {
+      if (index === current) {
+        ind.classList.add("active");
+      } else {
+        ind.classList.remove("active");
+      }
+    });
+
+    // Keyingi slayga o'tish
+    current = (current + 1) % images.length;
+  }
+
+  // Dastlabki slayni ko'rsatish
+  updateSlide();
+
+  // Har 5 sekundda slaydni o'zgartirish
+  setInterval(updateSlide, 5000);
+
+  // Rasmlarni oldindan yuklash
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+</script>
+{% endblock %}
